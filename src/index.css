@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-evolve-dark text-evolve-text;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  * {
+    @apply border-evolve-light-gray;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply bg-evolve-gray/50 backdrop-blur-sm border border-evolve-light-gray/30;
+  }
+  
+  .button-primary {
+    @apply bg-evolve-blue text-evolve-dark font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-evolve-blue/90 active:scale-95;
+  }
+  
+  .button-secondary {
+    @apply bg-evolve-light-gray text-evolve-text font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-evolve-light-gray/80 active:scale-95;
+  }
+  
+  .input-field {
+    @apply bg-evolve-light-gray border border-evolve-light-gray text-evolve-text px-4 py-3 rounded-xl focus:outline-none focus:border-evolve-blue transition-colors;
+  }
+  
+  .card {
+    @apply bg-evolve-gray border border-evolve-light-gray rounded-2xl p-6;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-evolve-blue to-evolve-green bg-clip-text text-transparent;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #404040;
+}
+
+/* Remove input number arrows */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
