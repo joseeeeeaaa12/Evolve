@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Plus, Minus, Clock, X, ChevronLeft, Trophy } from 'lucide-react';
+import { Check, Plus, Minus, ChevronLeft, Trophy } from 'lucide-react';
 import { useAppStore } from '../store';
 import { useTimer } from '../hooks/useTimer';
-import { formatTime } from '../utils/progression';
+
 
 const Workout = () => {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ export interface Exercise {
   videoUrl?: string;
 }
 
-export interface Set {
+export interface WorkoutSet {
   id: string;
   weight: number;
   reps: number;
@@ -23,7 +23,7 @@ export interface WorkoutExercise {
   id: string;
   exerciseId: string;
   exercise: Exercise;
-  sets: Set[];
+  sets: WorkoutSet[];
   targetSets: number;
   targetWeight: number;
   targetReps: number;

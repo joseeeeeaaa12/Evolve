@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { User, Workout, Exercise, WorkoutExercise, Set, TimerState, PersonalRecord, ProgressionRule } from '../types';
+import { User, Workout, Exercise, WorkoutSet, TimerState, PersonalRecord, ProgressionRule } from '../types';
 import { calculateOneRM, generateProgression } from '../utils/progression';
 
 interface AppState {
@@ -186,7 +186,7 @@ export const useAppStore = create<AppState>()(
         
         const updatedExercises = state.currentWorkout.exercises.map(ex => {
           if (ex.id === exerciseId) {
-            const newSet: Set = {
+            const newSet: WorkoutSet = {
               id: `set-${Date.now()}`,
               weight: ex.targetWeight,
               reps: 0,

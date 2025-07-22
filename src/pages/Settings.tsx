@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Save, User, Bell, Volume2, VolumeX, Smartphone, RotateCcw, Trash2 } from 'lucide-react';
+import { Save, User, Volume2, VolumeX, Smartphone, RotateCcw } from 'lucide-react';
 import { useAppStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { TrendingUp, Award, Calendar, Target, BarChart3 } from 'lucide-react';
+import { TrendingUp, Award, Target, BarChart3 } from 'lucide-react';
 import { useAppStore } from '../store';
-import { format, subDays, startOfWeek, endOfWeek } from 'date-fns';
+import { format, subDays } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 const Progress = () => {

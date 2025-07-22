@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, TrendingUp, Calendar, Target, Award, ChevronRight } from 'lucide-react';
+import { Play, Calendar, Target, Award, ChevronRight } from 'lucide-react';
 import { useAppStore } from '../store';
 import { format } from 'date-fns';
-import { Workout, WorkoutExercise, Set } from '../types';
+import { Workout, WorkoutExercise, WorkoutSet } from '../types';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const Dashboard = () => {
       const exercise = exercises.find(ex => ex.id === exerciseId)!;
       const progression = calculateNextWorkout(exerciseId);
       
-      const sets: Set[] = Array.from({ length: progression.sets }, (_, setIndex) => ({
+      const sets: WorkoutSet[] = Array.from({ length: progression.sets }, (_, setIndex) => ({
         id: `set-${exerciseId}-${setIndex}`,
         weight: progression.weight,
         reps: 0,

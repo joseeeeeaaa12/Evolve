@@ -12,7 +12,7 @@ interface ExerciseResult {
 
 const Foundation = () => {
   const navigate = useNavigate();
-  const { exercises, completeFoundationSession, updateUser } = useAppStore();
+  const { exercises, completeFoundationSession } = useAppStore();
   const [currentStep, setCurrentStep] = useState<'intro' | 'exercises' | 'complete'>('intro');
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [results, setResults] = useState<ExerciseResult[]>([]);

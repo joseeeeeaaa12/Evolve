@@ -3,7 +3,7 @@ import { useAppStore } from '../store';
 
 export const useTimer = () => {
   const { timer, tickTimer, stopTimer, startTimer, pauseTimer } = useAppStore();
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (timer.isActive && timer.timeRemaining > 0) {
