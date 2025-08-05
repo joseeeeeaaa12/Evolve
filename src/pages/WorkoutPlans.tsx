@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Info, X, Play, Target, Clock, Dumbbell } from 'lucide-react';
+import { Info, Play, Target, Clock, Dumbbell } from 'lucide-react';
 import { useAppStore } from '../store';
 import { Workout, WorkoutExercise, Set } from '../types';
 
