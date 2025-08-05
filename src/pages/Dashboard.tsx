@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, TrendingUp, Calendar, Target, Award, ChevronRight } from 'lucide-react';
+import { Play, Calendar, Target, Award, ChevronRight, Info, X } from 'lucide-react';
 import { useAppStore } from '../store';
 import { format } from 'date-fns';
 import { Workout, WorkoutExercise, Set } from '../types';
@@ -9,6 +9,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { user, exercises, startWorkout, calculateNextWorkout } = useAppStore();
   const [isGeneratingWorkout, setIsGeneratingWorkout] = useState(false);
+  const [showWorkoutDetails, setShowWorkoutDetails] = useState(false);
 
   if (!user) return null;
 
@@ -155,27 +156,36 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <button
-          onClick={handleStartWorkout}
-          disabled={isGeneratingWorkout}
-          className={`w-full flex items-center justify-center gap-3 text-lg ${
-            isGeneratingWorkout 
-              ? 'bg-evolve-light-gray text-evolve-text-muted cursor-not-allowed' 
-              : 'button-primary'
-          } px-6 py-4 rounded-xl transition-all duration-200`}
-        >
-          {isGeneratingWorkout ? (
-            <>
-              <div className="w-5 h-5 border-2 border-evolve-text-muted border-t-transparent rounded-full animate-spin"></div>
-              Generating Workout...
-            </>
-          ) : (
-            <>
-              <Play size={20} />
-              Start Workout
-            </>
-          )}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowWorkoutDetails(true)}
+            className="button-secondary flex items-center justify-center gap-2 px-4 py-3"
+          >
+            <Info size={18} />
+            View Details
+          </button>
+          <button
+            onClick={handleStartWorkout}
+            disabled={isGeneratingWorkout}
+            className={`flex-1 flex items-center justify-center gap-3 text-lg ${
+              isGeneratingWorkout 
+                ? 'bg-evolve-light-gray text-evolve-text-muted cursor-not-allowed' 
+                : 'button-primary'
+            } px-6 py-4 rounded-xl transition-all duration-200`}
+          >
+            {isGeneratingWorkout ? (
+              <>
+                <div className="w-5 h-5 border-2 border-evolve-text-muted border-t-transparent rounded-full animate-spin"></div>
+                Generating Workout...
+              </>
+            ) : (
+              <>
+                <Play size={20} />
+                Start Workout
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Recent PRs */}
@@ -226,6 +236,89 @@ const Dashboard = () => {
         </div>
         <div className="text-evolve-text-muted text-sm">— Leigh Hunt</div>
       </div>
+
+      {/* Workout Details Modal */}
+      {showWorkoutDetails && (
+        <div className="fixed inset-0 bg-evolve-dark/80 flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="card max-w-lg w-full max-h-[80vh] overflow-y-auto animate-slide-up">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-evolve-text">{nextWorkout.name}</h2>
+              <button
+                onClick={() => setShowWorkoutDetails(false)}
+                className="w-8 h-8 bg-evolve-light-gray rounded-full flex items-center justify-center text-evolve-text hover:bg-evolve-light-gray/80 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="text-evolve-text-muted">
+                <p>Here's what you'll be doing in today's workout:</p>
+              </div>
+
+              {nextWorkout.exercises.map((exercise, index) => (
+                <div key={exercise.id} className="bg-evolve-light-gray rounded-xl p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-evolve-text">{exercise.exercise.name}</h3>
+                      {index === 0 && (
+                        <div className="text-evolve-green text-sm font-medium">Main Lift</div>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-evolve-blue">
+                        {exercise.targetWeight} lbs
+                      </div>
+                      <div className="text-evolve-text-muted text-sm">
+                        Rest: {Math.floor(exercise.restTime / 60)}:{(exercise.restTime % 60).toString().padStart(2, '0')}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-evolve-text-muted text-sm">
+                    {exercise.exercise.description}
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-evolve-text">Target Sets:</div>
+                    {exercise.sets.map((set, setIndex) => (
+                      <div key={set.id} className="flex items-center justify-between text-sm">
+                        <span className="text-evolve-text-muted">Set {setIndex + 1}</span>
+                        <span className="text-evolve-text">
+                          {set.targetWeight} lbs × {set.targetReps} reps
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="text-xs text-evolve-text-muted">
+                    <strong>Muscle Groups:</strong> {exercise.exercise.muscleGroups.join(', ')}
+                  </div>
+                </div>
+              ))}
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => setShowWorkoutDetails(false)}
+                  className="flex-1 button-secondary"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    setShowWorkoutDetails(false);
+                    handleStartWorkout();
+                  }}
+                  className="flex-1 button-primary flex items-center justify-center gap-2"
+                >
+                  <Play size={16} />
+                  Start Workout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
