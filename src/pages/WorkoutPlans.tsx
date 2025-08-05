@@ -22,7 +22,7 @@ interface WorkoutPlan {
 
 const WorkoutPlans = () => {
   const navigate = useNavigate();
-  const { exercises, startWorkout, user } = useAppStore();
+  const { exercises, startWorkout } = useAppStore();
   const [selectedPlan, setSelectedPlan] = useState<WorkoutPlan | null>(null);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -93,7 +93,7 @@ const WorkoutPlans = () => {
 
   const handleStartPlan = (plan: WorkoutPlan) => {
     // Convert plan to workout format
-    const workoutExercises: WorkoutExercise[] = plan.exercises.map((planExercise, index) => {
+    const workoutExercises: WorkoutExercise[] = plan.exercises.map((planExercise) => {
       const exercise = exercises.find(ex => ex.id === planExercise.exerciseId)!;
       
       const sets: Set[] = Array.from({ length: planExercise.sets }, (_, setIndex) => ({
@@ -219,103 +219,135 @@ const WorkoutPlans = () => {
         ))}
       </div>
 
-      {/* Workout Plan Details Modal */}
+            {/* Workout Plan Details Modal */}
       {showDetails && selectedPlan && (
-        <div className="fixed inset-0 bg-evolve-dark/80 flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="card max-w-2xl w-full max-h-[80vh] overflow-y-auto animate-slide-up">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-evolve-text">{selectedPlan.name}</h2>
-                <div className={`inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium mt-2 ${getDifficultyColor(selectedPlan.difficulty)}`}>
-                  {selectedPlan.difficulty}
-                </div>
-              </div>
+        <div 
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '20px'
+          }}
+        >
+          <div 
+            style={{
+              backgroundColor: 'white',
+              color: 'black',
+              borderRadius: '10px',
+              padding: '30px',
+              width: '100%',
+              maxWidth: '600px',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>{selectedPlan.name}</h2>
               <button
                 onClick={() => setShowDetails(false)}
-                className="w-8 h-8 bg-evolve-light-gray rounded-full flex items-center justify-center text-evolve-text hover:bg-evolve-light-gray/80 transition-colors"
+                style={{
+                  backgroundColor: '#f0f0f0',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '30px',
+                  height: '30px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
               >
-                <X size={16} />
+                ✕
               </button>
             </div>
 
-            <div className="space-y-6">
-              <div>
-                <p className="text-evolve-text-muted">{selectedPlan.description}</p>
+            <p style={{ color: '#666', marginBottom: '20px' }}>{selectedPlan.description}</p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '20px' }}>
+              <div style={{ backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{selectedPlan.duration}</div>
+                <div style={{ color: '#666', fontSize: '14px' }}>Duration</div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-evolve-light-gray rounded-xl p-4 text-center">
-                  <div className="text-lg font-bold text-evolve-text">{selectedPlan.duration}</div>
-                  <div className="text-evolve-text-muted text-sm">Duration</div>
-                </div>
-                <div className="bg-evolve-light-gray rounded-xl p-4 text-center">
-                  <div className="text-lg font-bold text-evolve-text">{selectedPlan.frequency}</div>
-                  <div className="text-evolve-text-muted text-sm">Frequency</div>
-                </div>
+              <div style={{ backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '8px', textAlign: 'center' }}>
+                <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{selectedPlan.frequency}</div>
+                <div style={{ color: '#666', fontSize: '14px' }}>Frequency</div>
               </div>
+            </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-evolve-text mb-4">Exercises</h3>
-                <div className="space-y-4">
-                  {selectedPlan.exercises.map((planExercise, index) => {
-                    const exercise = exercises.find(ex => ex.id === planExercise.exerciseId);
-                    if (!exercise) return null;
-
-                    return (
-                      <div key={planExercise.exerciseId} className="bg-evolve-light-gray rounded-xl p-4">
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <h4 className="font-semibold text-evolve-text">{exercise.name}</h4>
-                            {index === 0 && (
-                              <div className="text-evolve-green text-sm font-medium">Primary Movement</div>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <div className="text-xl font-bold text-evolve-blue">
-                              {planExercise.weight} lbs
-                            </div>
-                            <div className="text-evolve-text-muted text-sm">
-                              Rest: {Math.floor(planExercise.restTime / 60)}:{(planExercise.restTime % 60).toString().padStart(2, '0')}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-evolve-text-muted text-sm mb-3">
-                          {exercise.description}
-                        </div>
-
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="text-evolve-text">
-                            <strong>{planExercise.sets} sets</strong> × <strong>{planExercise.reps} reps</strong>
-                          </div>
-                          <div className="text-xs text-evolve-text-muted">
-                            <strong>Muscles:</strong> {exercise.muscleGroups.join(', ')}
-                          </div>
+            <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '15px' }}>Exercises</h3>
+            <div style={{ marginBottom: '20px' }}>
+              {selectedPlan.exercises.map((planExercise, index) => {
+                const exercise = exercises.find(ex => ex.id === planExercise.exerciseId);
+                if (!exercise) return null;
+                return (
+                  <div key={planExercise.exerciseId} style={{ 
+                    backgroundColor: '#f5f5f5', 
+                    padding: '15px', 
+                    borderRadius: '8px', 
+                    marginBottom: '10px' 
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h4 style={{ fontWeight: 'bold', margin: '0 0 5px 0' }}>{exercise.name}</h4>
+                        <div style={{ fontSize: '14px' }}>
+                          <strong>{planExercise.sets} sets</strong> × <strong>{planExercise.reps} reps</strong>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#2563eb' }}>
+                          {planExercise.weight} lbs
+                        </div>
+                        <div style={{ fontSize: '12px', color: '#666' }}>
+                          Rest: {Math.floor(planExercise.restTime / 60)}:{(planExercise.restTime % 60).toString().padStart(2, '0')}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => setShowDetails(false)}
-                  className="flex-1 button-secondary"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={() => {
-                    setShowDetails(false);
-                    handleStartPlan(selectedPlan);
-                  }}
-                  className="flex-1 button-primary flex items-center justify-center gap-2"
-                >
-                  <Play size={16} />
-                  Start This Plan
-                </button>
-              </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button
+                onClick={() => setShowDetails(false)}
+                style={{
+                  flex: 1,
+                  backgroundColor: '#f0f0f0',
+                  color: 'black',
+                  border: 'none',
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Close
+              </button>
+              <button
+                onClick={() => {
+                  setShowDetails(false);
+                  handleStartPlan(selectedPlan);
+                }}
+                style={{
+                  flex: 1,
+                  backgroundColor: '#2563eb',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 24px',
+                  borderRadius: '8px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Start This Plan
+              </button>
             </div>
           </div>
         </div>
