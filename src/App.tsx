@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 // Pages
 import Dashboard from './pages/Dashboard';
 import Foundation from './pages/Foundation';
+import WorkoutPlans from './pages/WorkoutPlans';
 import Workout from './pages/Workout';
 import Progress from './pages/Progress';
 import Settings from './pages/Settings';
@@ -37,6 +38,7 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/plans" element={<WorkoutPlans />} />
         <Route path="/workout" element={<Workout />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/settings" element={<Settings />} />
